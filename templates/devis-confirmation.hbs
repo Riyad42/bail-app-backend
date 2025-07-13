@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Confirmation de demande de devis</title>
+    <style>
+        body {
+
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+            padding: 30px 40px;
+        }
+
+        h1 {
+            color: #00103d;
+            font-size: 45px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 16px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .info-block {
+            margin-top: 20px;
+            padding: 15px;
+            border-left: 4px solid #1d4ed8;
+            background-color: #f1f5f9;
+            border-radius: 6px;
+        }
+
+        .info-block strong {
+            display: inline-block;
+            width: 120px;
+            color: #111827;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 13px;
+            color: #9ca3af;
+        }
+
+        .logo {
+            font-family: 'Segoe UI', sans-serif;
+
+            text-align: center;
+            font-size: 30px;
+            font-weight: 800;
+            color: #01296a;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2 class="logo">Nuvity</h2>
+        <h1>Demande de devis reçue</h1>
+        <br>
+        <p>Bonjour {{ nom }},</p>
+        <p>Nous avons bien reçu votre demande de devis. Voici un récapitulatif de votre projet :</p>
+
+        <div class="info-block">
+            <p><strong>Type de projet :</strong> {{ prestation }}</p>
+            <p><strong>Message :</strong> {{ message }}</p>
+            <p><strong>Préférence :</strong> {{ preference }}</p>
+        </div>
+
+        <p>Notre équipe vous recontactera dans les plus brefs délais pour discuter des prochaines étapes.</p>
+        <p>Merci pour votre confiance.</p>
+
+        <div class="footer">
+            &copy; 2025 Nuvity. Tous droits réservés.
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+  // This is your Prisma schema file,
+  // learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+  // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+  // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+  generator client {
+    provider = "prisma-client-js"
+  }
+
+  datasource db {
+    provider = "sqlite"
+    url      = "file:./dev.db"
+  }
+
+    model User {
+      id        Int       @id @default(autoincrement())
+      email     String    @unique
+      password  String
+      name      String
+      role      String    @default("USER")
+      createdAt DateTime  @default(now())
+      onboardingCompleted Boolean @default(false)
+
+      // Powens
+      powensAuthToken  String? // Token d’accès permanent
+      powensConnectionId String? // ID de la connexion bancaire
+
+
+      biens      Bien[]
+      locataires Locataire[]
+      baux       Bail[]
+    }
+
+
+    model Bien {
+      id                 Int       @id @default(autoincrement())
+      titre              String
+      adresse            String
+      ville              String
+      codePostal         String
+      superficie         Int
+      type               String
+      meuble             Boolean     @default(false)
+      loyerMensuel       Float
+      chargesMensuelles  Float?
+      prixAchat          Float
+      fraisNotaire       Float?
+      fraisTravaux       Float?
+      dateAcquisition    DateTime?
+      description        String?
+
+      actif              Boolean     @default(true)
+      createdAt          DateTime    @default(now())
+      updatedAt          DateTime    @updatedAt
+
+      user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+      userId             Int
+
+      baux               Bail[]
+    }
+
+  model Locataire {
+    id              Int       @id @default(autoincrement())
+    civilite        String
+    prenom          String
+    nom             String
+    email           String
+    tel             String
+    adresse         String?
+    dateNaissance   DateTime?
+    typeLocataire   String?
+    actif           Boolean   @default(true)
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+    fiabilite       Int       @default(100)
+
+    user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId          Int
+
+    baux            Bail[]
+    paiements       PaiementLoyer[]
+
+    transactionsDetectees TransactionDetectee[]
+
+  }
+
+  model Bail {
+    id                Int         @id @default(autoincrement())
+    dateDebut         DateTime
+    dateFin           DateTime
+    montant           Float
+    chargesMensuelles Float?
+    typeBail          String?
+    paiementLe        Int?
+    caution           Float?
+    actif             Boolean     @default(true)
+    createdAt         DateTime    @default(now())
+    updatedAt         DateTime    @updatedAt
+    documentUrl       String?
+
+    paiements         PaiementLoyer[]
+
+    bien              Bien        @relation(fields: [bienId], references: [id], onDelete: Cascade)
+    bienId            Int
+
+    locataire         Locataire   @relation(fields: [locataireId], references: [id], onDelete: Cascade)
+    locataireId       Int
+
+    user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId            Int
+  }
+
+  model PaiementLoyer {
+    id           Int       @id @default(autoincrement())
+    mois         Int
+    annee        Int
+    statut       String
+    montant      Float
+    datePaiement DateTime?
+    relanceEnvoyee Boolean @default(false)
+    quittanceEnvoyee Boolean @default(false)
+    createdAt    DateTime  @default(now())
+    updatedAt    DateTime  @updatedAt
+
+    bail         Bail      @relation(fields: [bailId], references: [id], onDelete: Cascade)
+    bailId       Int
+
+    locataire    Locataire @relation(fields: [locataireId], references: [id], onDelete: Cascade)
+    locataireId  Int
+    @@unique([mois, annee, bailId]) // 🔒 empêche tout doublon pour un même mois/bail
+
+  }
+
+
+  model TransactionDetectee {
+    id           Int       @id @default(autoincrement())
+    webid        String    @unique
+    locataireId  Int
+    locataire    Locataire @relation(fields: [locataireId], references: [id])
+    mois         Int
+    annee        Int
+    createdAt    DateTime  @default(now())
+  }
+
