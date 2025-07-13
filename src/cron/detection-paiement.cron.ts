@@ -9,7 +9,7 @@ export class DetectionPaiementCron {
         private detectionService: PowensService,
     ) { }
 
-    @Cron(CronExpression.EVERY_10_MINUTES)
+    @Cron(CronExpression.EVERY_10_MINUTES, { name: 'detectAllPaiements' })
     async detectAllPaiements() {
         console.log('🕒 [CRON] Détection paiements - Démarrage');
 

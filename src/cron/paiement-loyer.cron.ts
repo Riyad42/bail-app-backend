@@ -8,7 +8,8 @@ export class PaiementLoyerCron {
 
     constructor(private prisma: PrismaService) { }
 
-    @Cron(CronExpression.EVERY_HOUR)
+    @Cron(CronExpression.EVERY_HOUR, { name: 'createMonthlyPaiementsIfMissing' })
+
     async createMonthlyPaiementsIfMissing() {
         const now = new Date();
         const mois = now.getMonth() + 1;
