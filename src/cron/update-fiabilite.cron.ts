@@ -8,8 +8,7 @@ export class UpdateFiabiliteCron {
 
     constructor(private readonly prisma: PrismaService) { }
 
-    @Cron(CronExpression.EVERY_MINUTE)
-    @Cron('0 0 * * *', { name: 'handleCron' })
+    @Cron(CronExpression.EVERY_MINUTE, { name: 'handleCron' })
     async handleCron() {
         const locataires = await this.prisma.locataire.findMany({
             where: { actif: true },
